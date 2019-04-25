@@ -236,6 +236,7 @@ function installKyma() {
 		| kubectl apply -f-
 
     applyServiceCatalogCRDOverride
+    kubectl -n kyma-installer get cm -oyaml
 
 	waitUntilInstallerApiAvailable
 
@@ -277,7 +278,7 @@ function addGithubDexConnector() {
 }
 
 function applyServiceCatalogCRDOverride(){
-cat <<EOF | ${kc} apply -f -
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
