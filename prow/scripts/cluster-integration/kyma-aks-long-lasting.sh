@@ -83,20 +83,17 @@ function cleanup() {
 		GATEWAY_IP_ADDRESS_NAME="${STANDARIZED_NAME}"
 
 		GATEWAY_IP_ADDRESS=$(az network public-ip show -g "${CLUSTER_RS_GROUP}" -n "${GATEWAY_IP_ADDRESS_NAME}" --query ipAddress -o tsv)
-		TMP_STATUS=$?
-		if [[ ${TMP_STATUS} -ne 0 ]]; then EXIT_STATUS=${TMP_STATUS}; fi
 		if [[ -n ${GATEWAY_IP_ADDRESS} ]];then
 			echo "Fetched Azure Gateway IP: ${GATEWAY_IP_ADDRESS}"
 		else
-			echo "Could not fetch Azure Gateway IP: GATEWAY_IP_ADDRESS variable is empty. Something went wrong. Failing"
-			exit 1
+			echo "Azure Gateway IP: GATEWAY_IP_ADDRESS variable is empty."
 		fi
-		TMP_STATUS=$?
-		if [[ ${TMP_STATUS} -ne 0 ]]; then EXIT_STATUS=${TMP_STATUS}; fi
 
-		"${TEST_INFRA_CLUSTER_INTEGRATION_SCRIPTS}"/delete-dns-record.sh --project="${CLOUDSDK_CORE_PROJECT}" --zone="${CLOUDSDK_DNS_ZONE_NAME}" --name="${GATEWAY_DNS_FULL_NAME=}" --address="${GATEWAY_IP_ADDRESS}" --dryRun=false
-		TMP_STATUS=$?
-		if [[ ${TMP_STATUS} -ne 0 ]]; then EXIT_STATUS=${TMP_STATUS}; fi
+        if [[ -n ${GATEWAY_IP_ADDRESS} ]]; then
+		    "${TEST_INFRA_CLUSTER_INTEGRATION_SCRIPTS}"/delete-dns-record.sh --project="${CLOUDSDK_CORE_PROJECT}" --zone="${CLOUDSDK_DNS_ZONE_NAME}" --name="${GATEWAY_DNS_FULL_NAME=}" --address="${GATEWAY_IP_ADDRESS}" --dryRun=false
+		    TMP_STATUS=$?
+		    if [[ ${TMP_STATUS} -ne 0 ]]; then EXIT_STATUS=${TMP_STATUS}; fi
+        fi
 
 		echo -e "---\nRemove DNS Record for Apiserver Proxy IP\n---"
 		APISERVER_DNS_FULL_NAME="apiserver.${DOMAIN}."
