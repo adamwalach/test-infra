@@ -58,7 +58,9 @@ function installStabilityChecker() {
 	        --name=stability-checker \
 	        --wait \
 	        --timeout=600 \
-	        --tls
+	        --tls \
+	        --debug
+
 }
 
 installStabilityChecker
