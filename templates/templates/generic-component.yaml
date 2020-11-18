@@ -50,6 +50,7 @@ job_template: &job_template
 {{- if $isValidForNextRelease }}
     - ^master$
     - ^main$
+    - ^release-1.17
 {{- end }}
 {{- if ne $releaseBranchPattern "" }}
     - {{ $releaseBranchPattern }}

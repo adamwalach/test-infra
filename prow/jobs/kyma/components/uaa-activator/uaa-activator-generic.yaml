@@ -20,6 +20,7 @@ job_template: &job_template
   branches:
     - ^master$
     - ^main$
+    - ^release-1.17
     - ^release-(1\.17|1\.16|1\.15)-uaa-activator$
   run_if_changed: "^components/uaa-activator/|^common/makefiles/"
   spec:
@@ -40,7 +41,7 @@ presubmits: # runs on PRs
   kyma-project/kyma:
     - name: pre-kyma-components-uaa-activator
       cluster: untrusted-workload
-      optional: false
+      optional: true
       <<: *job_template
 
 postsubmits:
